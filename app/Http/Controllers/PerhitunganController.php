@@ -48,7 +48,7 @@ class PerhitunganController extends Controller
             DB::rollback();
             echo '<script type="text/javascript">alert("Penyimpanan session gagal!"); history.back()</script>';
         }
-        
+
 
         $kriteria = [
             "kondisi_barang",
@@ -64,7 +64,7 @@ class PerhitunganController extends Controller
         $harga = $request->harga; //index 1
         array_unshift($harga, 1);
         array_unshift($harga, 1/$kondisi[1]);
-        
+
         $kebutuhan_orang_lain = $request->kebutuhan_orang_lain; //index 2
         array_unshift($kebutuhan_orang_lain, 1);
         array_unshift($kebutuhan_orang_lain, 1/$harga[2]);
@@ -93,11 +93,11 @@ class PerhitunganController extends Controller
 
         $perbandingan = [$kondisi, $harga, $kebutuhan_orang_lain, $waktu_pemakaian, $ruang_penyimpanan, $kebutuhan_finansial];
         // dd($perbandingan);
-        
+
         // mencari total
         $total = [0, 0, 0, 0, 0, 0];
-        for ($i=0; $i < count($perbandingan); $i++) { 
-            for ($j=0; $j < count($perbandingan[$i]); $j++) { 
+        for ($i=0; $i < count($perbandingan); $i++) {
+            for ($j=0; $j < count($perbandingan[$i]); $j++) {
                 $total[$i] += $perbandingan[$j][$i];
             }
         }
@@ -122,7 +122,7 @@ class PerhitunganController extends Controller
         $bobot = [];
         for ($i=0; $i < count($normalisasi); $i++) {
             $jumlah = 0;
-            for ($j=0; $j < count($normalisasi[$i]); $j++) { 
+            for ($j=0; $j < count($normalisasi[$i]); $j++) {
                 $jumlah += $normalisasi[$i][$j];
             }
             $jumlah = $jumlah/count($perbandingan);
@@ -134,15 +134,15 @@ class PerhitunganController extends Controller
         // langkah 4
         // validasi CR
         $validasi = [];
-        for ($i=0; $i < count($perbandingan); $i++) { 
-            for ($j=0; $j < count($perbandingan[$i]); $j++) { 
+        for ($i=0; $i < count($perbandingan); $i++) {
+            for ($j=0; $j < count($perbandingan[$i]); $j++) {
                 $validasi[$i][$j] = $perbandingan[$j][$i]*$bobot[$i];
             }
         }
         // echo '<pre>' . var_export($validasi, true) . '</pre>';
 
         $total_validasi = [];
-        for ($i=0; $i < count($validasi); $i++) { 
+        for ($i=0; $i < count($validasi); $i++) {
             $temp_total = 0;
             for ($j=0; $j < count($validasi[$i]); $j++) {
                 $temp_total += $validasi[$j][$i];
@@ -152,12 +152,12 @@ class PerhitunganController extends Controller
         // echo '<pre>' . var_export($total_validasi, true) . '</pre>';
 
         $validasi_lmax = [];
-        for ($i=0; $i < count($total_validasi); $i++) { 
+        for ($i=0; $i < count($total_validasi); $i++) {
             $validasi_lmax [$i] = $total_validasi[$i]/$bobot[$i];
         }
         // echo '<pre>' . var_export($validasi_lmax, true) . '</pre>';
         $total_bobot_lmax = 0;
-        for ($i=0; $i < count($validasi_lmax); $i++) { 
+        for ($i=0; $i < count($validasi_lmax); $i++) {
             $total_bobot_lmax += $validasi_lmax[$i];
         }
         $lmax = $total_bobot_lmax/count($perbandingan);
@@ -178,7 +178,7 @@ class PerhitunganController extends Controller
         // echo '<pre>' . var_export($cr, true) . '</pre>';
 
         /*
-        - jika nilai CR > 0.1 maka input ditolak -> beri pesan berupa alert ke frontend 
+        - jika nilai CR > 0.1 maka input ditolak -> beri pesan berupa alert ke frontend
         "input anda tidak konsisten"
         - jika CR < 0.1 maka data $bobot masukkan ke DB
         */
@@ -200,7 +200,7 @@ class PerhitunganController extends Controller
                 DB::rollback();
                 echo '<script type="text/javascript">alert("Terjadi kesalahan!"); history.back()</script>';
             }
-            
+
         }
     }
 
@@ -211,8 +211,8 @@ class PerhitunganController extends Controller
     {
         $session = Session::where('id', $id)->first();
         $ahp = Ahp::where('session_id', $id)->orderByDesc('bobot')->get();
-        $aras = Aras::where('session_id', $id)->orderByDesc('rank')->get();
-      
+        $aras = Aras::with('barang')->where('session_id', $id)->orderBy('rank', 'asc')->get();
+
         return view('perhitungan.show', [
             "title" => "Detail Perhitungan ".$session->name,
             "ahp" => $ahp,

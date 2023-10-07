@@ -35,7 +35,7 @@
   @if ($aras->isEmpty())
     <div class="row">
       <div class="col text-end me-5">
-          <a href="{{url('/perhitungan/aras/create')}}" class="btn btn-warning">Mulai Perhitungan</a>
+          <a href="{{url('/perhitungan/aras/create/'.$ahp[1]->session_id)}}" class="btn btn-warning">Mulai Perhitungan</a>
       </div>
     </div>
   @endif
@@ -53,7 +53,7 @@
           <tr>
             <td colspan="3" class="text-center">Perhitungan Belum Dilakukan!</td>
           </tr>
-          
+
         @endif
         @foreach ($aras as $data)
           <tr>

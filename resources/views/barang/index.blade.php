@@ -25,14 +25,14 @@
                             <td>{{$data->tanggal_pembelian}}</td>
                             <td>
                                 <a href="{{url('/barang/edit/'.$data->id)}}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{url('/barang/destroy/'.$data->id)}}">
+                                <form action="{{url('/barang/destroy/'.$data->id)}}" class="d-inline">
                                   @method('delete')
                                   @csrf
                                   {{-- <a href="{{url('/barang/destroy/'.$data->id)}}" class="btn btn-sm btn-danger" onclick="return confirm('Apakah kamu yakin?')">Delete</a> --}}
                                   <button type="submit"
                                   class="btn btn-sm btn-danger" onclick="return confirm('Apakah kamu yakin?')">Delete</button>
                                 </form>
-                                
+
                             </td>
                         </tr>
                         @endforeach

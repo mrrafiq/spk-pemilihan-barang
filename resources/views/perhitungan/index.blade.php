@@ -18,9 +18,17 @@
           </tr>
         </thead>
         <tbody class="table-border-bottom-0">
+            @if (count($datas) == 0)
+                <tr>
+                    <td colspan="4" class="text-center">Tidak ada data</td>
+                </tr>
+
+            @endif
+        <?php $no = 0?>
           @foreach ($datas as $data)
+            <?php $no++?>
             <tr>
-              <td>{{$data->id}}</td>
+              <td>{{$no}}</td>
               <td>{{$data->name}}</td>
               <td>{{$data->created_at}}</td>
               <td>
@@ -32,7 +40,6 @@
                   {{-- <button type="submit"
                   class="btn btn-sm btn-danger" onclick="return confirm('Apakah kamu yakin?')">Delete</button>
                 </form> --}}
-                
             </td>
             </tr>
           @endforeach

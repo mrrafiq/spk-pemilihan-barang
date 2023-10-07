@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('aras', function (Blueprint $table) {
+        Schema::create('aras_value', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('session_id');
             $table->unsignedBigInteger('barang_id');
-            $table->integer('rank');
-            $table->double('utility_point', 8,4);
+            $table->string('criteria', 64);
+            $table->integer('value');
             $table->timestamps();
 
             $table->foreign('session_id')->references('id')->on('sessions');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('aras');
+        Schema::dropIfExists('aras_value');
     }
 };
