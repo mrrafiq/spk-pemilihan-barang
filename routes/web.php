@@ -47,4 +47,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/perhitungan/aras/create/{id}', 'App\Http\Controllers\ArasController@create')->name('aras.create');
     Route::post('/perhitungan/aras/store/{id}', 'App\Http\Controllers\ArasController@store')->name('aras.store');
+    Route::post('/perhitungan/aras/calculate/{id}', 'App\Http\Controllers\ArasController@beginCalculate')->name('aras.calculate');
+
+    Route::post('/logout', 'App\Http\Controllers\UserController@logout')->name('logout');
 });

@@ -25,16 +25,50 @@ class ArasController extends Controller
         ];
 
         $barang = Barang::where('user_id', Auth::user()->id)->get();
+
+        $aras_value = ArasValue::where('session_id', $id)->orderBy('barang_id', "ASC")->get();
+        // group by barang_id and each barang_id group depends on order of criteria
+        $grouped = [];
+        foreach ($barang as $key => $value) {
+            $temp = [];
+            foreach ($kriteria as $key2 => $value2) {
+                foreach ($aras_value as $key3 => $value3) {
+                    if ($value->id == $value3->barang_id && $value2 == $value3->criteria) {
+                        $temp [] = $value3;
+                    }
+                }
+            }
+            $grouped [] = $temp;
+        }
+
+        // cek apakah user sudah pernah melakukan perhitungan di session ini
+        $check = Aras::where('session_id', $id)->count();
+        // if ($check > 0) {
+        //     // return dengan alert message "Anda sudah pernah melakukan perhitungan pada session ini"
+        //     echo '<script type="text/javascript">alert("Anda sudah pernah melakukan perhitungan pada session ini"); history.back()</script>';
+        // }
+
+        // dd($grouped);
         return view('perhitungan.aras.create', [
             "title" => "Perhitungan ARAS",
             "barang" => $barang,
             "id" => $id,
             "kriteria" => $kriteria,
+            'aras_value' => $grouped,
+            'check' => $check
         ]);
     }
 
     public function store(Request $request, $id)
     {
+        $request->validate([
+            "kondisi_barang" => "required|between:1,10",
+            "harga_barang" => "required|between:1,10",
+            "kebutuhan_orang_lain" => "required|between:1,10",
+            "waktu_pemakaian" => "required|between:1,10",
+            "ruang_penyimpanan" => "required|between:1,10",
+            "kebutuhan_finansial" => "required|between:1,10",
+        ]);
         $all_request = $request->all();
         $data = $all_request;
         unset($data['_token']);
@@ -46,8 +80,18 @@ class ArasController extends Controller
         $kriteria = array_keys($data);
         // dd($kriteria);
 
+        DB::beginTransaction();
+        // cek apakah nilai sudah pernah tersimpan di tabel aras_value
+        $check = ArasValue::where('session_id', $id)->count();
+        if($check > 0){
+            try {
+                ArasValue::where('session_id', $id)->delete();
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+
         try {
-            DB::beginTransaction();
             foreach ($data as $key => $value) {
                 foreach ($data_barang as $key2 => $value2) {
                     $prepare_data = [
@@ -65,13 +109,38 @@ class ArasController extends Controller
             throw $th;
         }
 
-        $calculate_aras = self::calculate($id);
-        if (!$calculate_aras) {
-            echo '<script type="text/javascript">alert("Terjadi kesalahan!"); history.back()</script>';
+        DB::commit();
+        // return to previous page and send flash message request is successful
+        return redirect('/perhitungan/detail/'.$id)->with(['success' => 'Data berhasil disimpan!']);
+
+    }
+
+    public function beginCalculate($id)
+    {
+        //cek apakah sudah pernaj menginput nilai aras
+        $check = ArasValue::where('session_id', $id)->count();
+        if ($check == 0) {
+            echo '<script type="text/javascript">alert("Anda belum menginput nilai ARAS"); history.back()</script>';
         }
 
-        DB::commit();
-        return redirect('/perhitungan/detail/'.$id);
+        // cek apakah sudah pernah melakukan perhitungan di session ini
+        $check = Aras::where('session_id', $id)->count();
+        if ($check > 0) {
+            // return dengan alert message "Anda sudah pernah melakukan perhitungan pada session ini"
+            echo '<script type="text/javascript">alert("Anda sudah pernah melakukan perhitungan pada session ini"); history.back()</script>';
+        }
+        DB::beginTransaction();
+        try {
+            $calculate_aras = self::calculate($id);
+            if (!$calculate_aras) {
+                echo '<script type="text/javascript">alert("Terjadi kesalahan!"); history.back()</script>';
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
+        return redirect('/perhitungan/detail/'.$id)->with(['success' => 'Perhitungan ARAS berhasil dilakukan!']);
     }
 
     private static function calculate($session_id)

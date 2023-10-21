@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ahp;
 use App\Models\Aras;
+use App\Models\ArasValue;
 use App\Models\Session;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -212,11 +213,13 @@ class PerhitunganController extends Controller
         $session = Session::where('id', $id)->first();
         $ahp = Ahp::where('session_id', $id)->orderByDesc('bobot')->get();
         $aras = Aras::with('barang')->where('session_id', $id)->orderBy('rank', 'asc')->get();
+        $aras_value = ArasValue::where('session_id', $id)->get();
 
         return view('perhitungan.show', [
             "title" => "Detail Perhitungan ".$session->name,
             "ahp" => $ahp,
             "aras" => $aras,
+            'aras_value' => $aras_value
         ]);
     }
 

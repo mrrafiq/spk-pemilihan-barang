@@ -11,7 +11,7 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $data = Barang::all();
+        $data = Barang::where('user_id', Auth::user()->id)->get();
         return view('barang.index', [
             "datas" => $data,
             "title" => "Data Barang"
@@ -52,7 +52,7 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+
     public function edit($id)
     {
         $data = Barang::where('id', $id)->first();
@@ -71,7 +71,7 @@ class BarangController extends Controller
         $barang->tanggal_pembelian = $request->tanggal_pembelian;
         $barang->save();
         return redirect()->route('barang.index')->with('success','barang berhasil di update');
-    } 
+    }
     public function destroy($id)
     {
         $post = Barang::findOrFail($id);

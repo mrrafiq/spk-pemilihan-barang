@@ -34,10 +34,14 @@ class UserController extends Controller
         Session::flash('error', 'Email atau Password salah');
         return redirect('/login');
     }
-    
+
 
     public function register(Request $request)
     {
+        $request->validate([
+            'username' => 'required|unique:users',
+            'password' => 'required',
+        ]);
         $username = $request->username;
         $password = $request->password;
         $password_confirmation = $request->password_confirmation;
@@ -53,6 +57,12 @@ class UserController extends Controller
         $user->save();
 
         Session::flash('success', 'Registrasi berhasil!');
+        return redirect('/login');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
         return redirect('/login');
     }
 }

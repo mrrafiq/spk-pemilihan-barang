@@ -137,6 +137,16 @@
               <h4 class="mb-2">Adventure starts here 🚀</h4>
               <p class="mb-4">Make your app management easy and fun!</p>
 
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
               <form id="formAuthentication" class="mb-3" action="{{url('register')}}" method="POST">
                 @csrf
                 <div class="mb-3">
@@ -160,6 +170,7 @@
                       name="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
+                      required
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
@@ -175,18 +186,19 @@
                       name="password_confirmation"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password_confirmation"
+                      required
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
                     <center><button class="btn btn-primary d-grid w-50">Daftarkan</button></center>
                 </div>
-                
+
               </form>
 
               <p class="text-center">
                 <span>Sudah punya akun?</span>
-                <a href="auth-login-basic.html">
+                <a href="{{url('/login')}}">
                   <span>Masuk disini</span>
                 </a>
               </p>

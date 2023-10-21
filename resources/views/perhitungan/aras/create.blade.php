@@ -13,6 +13,15 @@
         </div>
     </div>
 </div>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="row">
 @foreach ($barang as $key => $barang)
   <div class="col-md-6 mb-3">
@@ -23,13 +32,13 @@
         <p>Tanggal Pembelian: {{$barang->tanggal_pembelian}}</p>
       </div>
       <div class="card-body">
-        @foreach ($kriteria as $data_kriteria)
+        @foreach ($kriteria as $index => $data_kriteria)
           <div class="row mb-3">
             <div class="col-md-5">
               <label for="" class="form-label">{{str_replace("_", " ", $data_kriteria)}}</label>
             </div>
             <div class="col-md-2">
-              <input type="number" class="form-control" name="{{$data_kriteria}}[{{$key}}]" min="1" max="10">
+              <input type="number" class="form-control" name="{{$data_kriteria}}[{{$key}}]" min="1" max="10" value="{{$aras_value[$key][$index]->value ?? ''}}" {{$check > 0 ? 'readonly' : 'required'}}>
             </div>
           </div>
         @endforeach
@@ -40,7 +49,9 @@
 </div>
 <div class="row mb-3">
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    @if ($check == 0)
     <button class="btn btn-primary" type="submit">Submit</button>
+    @endif
   </div>
 </div>
 </form>
