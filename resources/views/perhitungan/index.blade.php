@@ -2,6 +2,11 @@
 @section('content')
   <div class="card">
     <h5 class="card-header">{{$title}}</h5>
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-block">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
     <div class="row">
       <div class="col text-end me-5">
           <a href="{{url('/perhitungan/create')}}" class="btn btn-primary">Tambah</a>

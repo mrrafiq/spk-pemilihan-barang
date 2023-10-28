@@ -39,6 +39,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/barang/update/{id}', 'App\Http\Controllers\BarangController@update')->name('barang.update');
     Route::get('/barang/destroy/{id}', 'App\Http\Controllers\BarangController@destroy')->name('barang.destroy');
 
+    Route::get('/kriteria', 'App\Http\Controllers\KriteriaController@index')->name('kriteria.index');
+    Route::get('/kriteria/create', 'App\Http\Controllers\KriteriaController@create')->name('kriteria.create');
+    Route::post('/kriteria/store', 'App\Http\Controllers\KriteriaController@store')->name('kriteria.store');
+    Route::get('/kriteria/edit/{id}', 'App\Http\Controllers\KriteriaController@edit')->name('kriteria.edit');
+    Route::post('/kriteria/update/{id}', 'App\Http\Controllers\KriteriaController@update')->name('kriteria.update');
+    Route::get('/kriteria/destroy/{id}', 'App\Http\Controllers\KriteriaController@destroy')->name('kriteria.destroy');
+
     // Route::resource('perhitungan','PerhitunganController');
     Route::get('/perhitungan/create', 'App\Http\Controllers\PerhitunganController@create')->name('perhitungan.create');
     Route::post('/perhitungan/store', 'App\Http\Controllers\PerhitunganController@store')->name('perhitungan.store');

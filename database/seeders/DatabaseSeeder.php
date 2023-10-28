@@ -53,5 +53,40 @@ class DatabaseSeeder extends Seeder
         ];
 
         $insert_barang = DB::table('barang')->insert($barang);
+
+        $kriteria = [
+            [
+                'user_id' => 1,
+                'nama_kriteria' => "Harga Barang",
+                'deskripsi' => null,
+            ],
+            [
+                'user_id' => 1,
+                'nama_kriteria' => "Kondisi Barang",
+                'deskripsi' => null,
+            ],
+            [
+                'user_id' => 1,
+                'nama_kriteria' => "Tanggal Pembelian",
+                'deskripsi' => null,
+            ],
+            [
+                'user_id' => 1,
+                'nama_kriteria' => "Kebutuhan Finansial",
+                'deskripsi' => null,
+            ],
+            [
+                'user_id' => 1,
+                'nama_kriteria' => "Kebutuhan Orang Lain",
+                'deskripsi' => null,
+            ],
+            [
+                'user_id' => 1,
+                'nama_kriteria' => "Ruang Penyimpanan",
+                'deskripsi' => null,
+            ],
+        ];
+
+        $insert_kriteria = DB::table('kriteria')->insert($kriteria);
     }
 }

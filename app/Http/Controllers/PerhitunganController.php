@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ahp;
 use App\Models\Aras;
+use App\Models\Kriteria;
 use App\Models\ArasValue;
 use App\Models\Session;
 use Auth;
+use Session as sess;
 use Illuminate\Support\Facades\DB;
 
 class PerhitunganController extends Controller
@@ -29,8 +31,10 @@ class PerhitunganController extends Controller
      */
     public function create()
     {
+        $kriteria = Kriteria::where('user_id', Auth::user()->id)->get();
         return view('perhitungan.create', [
-            "title" => "Pembobotan Kriteria"
+            "title" => "Pembobotan Kriteria",
+            "kriteria" => $kriteria
         ]);
     }
 
@@ -50,59 +54,51 @@ class PerhitunganController extends Controller
             echo '<script type="text/javascript">alert("Penyimpanan session gagal!"); history.back()</script>';
         }
 
+        $kriteria = Kriteria::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->get()->pluck('nama_kriteria')->toArray();
+        foreach ($kriteria as $key => $value) {
+            $kriteria[$key] = strtolower(str_replace(' ', '_', $value));
+        }
 
-        $kriteria = [
-            "kondisi_barang",
-            "harga_barang",
-            "kebutuhan_orang_lain",
-            "waktu_pemakaian",
-            "ruang_penyimpanan",
-            "kebutuhan_finansial",
-        ];
-        $kondisi = $request->kondisi; //index 0
-        array_unshift($kondisi, 1);
+        $req = $request->all();
+        // remove _token an title from $req array
+        unset($req['_token']);
+        unset($req['title']);
 
-        $harga = $request->harga; //index 1
-        array_unshift($harga, 1);
-        array_unshift($harga, 1/$kondisi[1]);
+        // kriteria terakhir yang tidak ada di $req perlu ditambahakn di akhir array
+        $req[$kriteria[count($kriteria)-1]] = [];
 
-        $kebutuhan_orang_lain = $request->kebutuhan_orang_lain; //index 2
-        array_unshift($kebutuhan_orang_lain, 1);
-        array_unshift($kebutuhan_orang_lain, 1/$harga[2]);
-        array_unshift($kebutuhan_orang_lain, 1/$kondisi[2]);
+        $values = [];
+        foreach ($req as $key => $value) {
+            $values[] = $value;
+        }
 
-        $waktu_pemakaian = $request->waktu_pemakaian; //index 3
-        array_unshift($waktu_pemakaian, 1);
-        array_unshift($waktu_pemakaian, 1/$kebutuhan_orang_lain[3]);
-        array_unshift($waktu_pemakaian, 1/$harga[3]);
-        array_unshift($waktu_pemakaian, 1/$kondisi[3]);
+        // mengisi index array dengan nilai 1 atau kebalikan dari pembanding
+        for ($i=0; $i < count($values); $i++) {
+            for ($j=0; $j < count($values); $j++) {
+                if ($j == $i) {
+                    array_splice($values[$i],$j,0,1);
+                }
+                if($j > $i){
+                    $temp = 1/$values[$i][$j];
+                    array_splice($values[$j],$i,0, $temp);
+                }
+            }
+        }
 
-        $ruang_penyimpanan = $request->ruang_penyimpanan; //index 4
-        array_unshift($ruang_penyimpanan, 1);
-        array_unshift($ruang_penyimpanan, 1/$waktu_pemakaian[4]);
-        array_unshift($ruang_penyimpanan, 1/$kebutuhan_orang_lain[4]);
-        array_unshift($ruang_penyimpanan, 1/$harga[4]);
-        array_unshift($ruang_penyimpanan, 1/$kondisi[4]);
-
-        $kebutuhan_finansial = []; //index 5
-        array_unshift($kebutuhan_finansial, 1);
-        array_unshift($kebutuhan_finansial, 1/$ruang_penyimpanan[5]);
-        array_unshift($kebutuhan_finansial, 1/$waktu_pemakaian[5]);
-        array_unshift($kebutuhan_finansial, 1/$kebutuhan_orang_lain[5]);
-        array_unshift($kebutuhan_finansial, 1/$harga[5]);
-        array_unshift($kebutuhan_finansial, 1/$kondisi[5]);
-
-        $perbandingan = [$kondisi, $harga, $kebutuhan_orang_lain, $waktu_pemakaian, $ruang_penyimpanan, $kebutuhan_finansial];
+        $perbandingan = $values;
         // dd($perbandingan);
 
         // mencari total
-        $total = [0, 0, 0, 0, 0, 0];
+        $total = [];
+        foreach ($kriteria as $key => $value) {
+            $total[] = 0;
+        }
         for ($i=0; $i < count($perbandingan); $i++) {
             for ($j=0; $j < count($perbandingan[$i]); $j++) {
                 $total[$i] += $perbandingan[$j][$i];
             }
         }
-        // var_dump($total);
+        // dd($total);
 
         // langkah 2
         // normalisasi
@@ -185,7 +181,9 @@ class PerhitunganController extends Controller
         */
         if ($cr > 0.1) {
             DB::rollback();
-            echo '<script type="text/javascript">alert("input anda tidak konsisten"); history.back()</script>';
+            $cr = number_format($cr,2);
+            echo "<script type='text/javascript'>alert('input anda tidak konsisten. Nilai CR = $cr'); history.back()</script>";
+            // return redirect()->back()->with('error', 'Input anda tidak konsisten!');
         }else{
             try {
                 for ($i=0; $i < count($perbandingan); $i++) {
@@ -196,6 +194,7 @@ class PerhitunganController extends Controller
                     $ahp->save();
                 }
                 DB::commit();
+                sess::flash('success', 'Perhitungan AHP berhasil. Nilai CR = '.$cr);
                 return redirect('/perhitungan');
             } catch (\Throwable $th) {
                 DB::rollback();

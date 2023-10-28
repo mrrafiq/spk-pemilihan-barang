@@ -63,6 +63,12 @@
           <div data-i18n="Analytics">Dashboard</div>
         </a>
       </li>
+      <li class="menu-item {{request()->is('kriteria/*') || request()->is('kriteria') ? 'active' : ''}}">
+        <a href="{{ url ('kriteria')}}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-home-circle"></i>
+          <div data-i18n="Analytics">Kriteria</div>
+        </a>
+      </li>
       <li class="menu-item {{request()->is('barang/*') || request()->is('barang') ? 'active' : ''}}">
         <a href="{{ url ('barang')}}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-home-circle"></i>

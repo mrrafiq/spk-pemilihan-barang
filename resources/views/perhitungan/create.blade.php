@@ -28,336 +28,48 @@
                         <strong>Kriteria Kedua</strong>
                     </div>
                 </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kondisi Barang
+                @for ($i = 0; $i < count($kriteria)-1; $i++)
+                    <div class="row align-items-start my-3">
+                        <div class="col">
+                            @for ($j = $i+1; $j < count($kriteria); $j++)
+                            <p>
+                                {{$kriteria[$i]->nama_kriteria}}
+                            </p><br>
+                            @endfor
+                        </div>
+                        <div class="col">
+                            @for ($j = $i+1; $j < count($kriteria); $j++)
+                                <select class="form-select" name="{{strtolower(str_replace(' ', '_', $kriteria[$i]->nama_kriteria))}}[]" id="" required> {{-- name = Harga Barang[] -> name="harga_barang[]" --}}
+                                    <option value="0.11"> 0.11</option>
+                                    <option value="0.12"> 0.12</option>
+                                    <option value="0.14"> 0.14</option>
+                                    <option value="0.16"> 0.16</option>
+                                    <option value="0.20"> 0.20</option>
+                                    <option value="0.25"> 0.25</option>
+                                    <option value="0.33"> 0.33</option>
+                                    <option value="0.5"> 0.5</option>
+                                    <option value="1" selected> 1</option>
+                                    <option value="2"> 2</option>
+                                    <option value="3"> 3</option>
+                                    <option value="4"> 4</option>
+                                    <option value="5"> 5</option>
+                                    <option value="6"> 6</option>
+                                    <option value="7"> 7</option>
+                                    <option value="8"> 8</option>
+                                    <option value="9"> 9</option>
+                                </select><br>
+                            @endfor
+                        </div>
+                        <div class="col">
+                            @for ($j = $i+1; $j < count($kriteria); $j++)
+                            <p>
+                                {{$kriteria[$j]->nama_kriteria}}
+                            </p>
+                            <br>
+                            @endfor
+                        </div>
                     </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kondisi[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Harga/nilai Barang
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kondisi Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kondisi[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Orang Lain
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kondisi Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kondisi[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Waktu Pemakaian
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kondisi Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kondisi[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Ruang Penyimpanan
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kondisi Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kondisi[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Finansial
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Harga/nilai Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="harga[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Orang Lain
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Nilai/Harga Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="harga[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Waktu Pemakaian
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Harga/Nilai Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="harga[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Ruang Penyimpanan
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Harga/Nilai Barang
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="harga[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Finansial
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kebutuhan Orang Lain
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kebutuhan_orang_lain[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Waktu Pemakaian
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kebutuhan Orang Lain
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kebutuhan_orang_lain[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Ruang Penyimpanan
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Kebutuhan Orang Lain
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="kebutuhan_orang_lain[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Finansial
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Waktu Pemakaian
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="waktu_pemakaian[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Ruang Penyimpanan
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Waktu Pemakaian
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="waktu_pemakaian[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Finansial
-                    </div>
-                </div>
-                <div class="row align-items-start my-3">
-                    <div class="col">
-                        Ruang Penyimpanan
-                    </div>
-                    <div class="col mx-3">
-                        <select class="form-select form-select-sm" name="ruang_penyimpanan[]" id="">
-                            <option value="1"> 1</option>
-                            <option value="2"> 2</option>
-                            <option value="3"> 3</option>
-                            <option value="4"> 4</option>
-                            <option value="5"> 5</option>
-                            <option value="6"> 6</option>
-                            <option value="7"> 7</option>
-                            <option value="8"> 8</option>
-                            <option value="9"> 9</option>
-                        </select>
-
-                    </div>
-                    <div class="col">
-                        Kebutuhan Finansial
-                    </div>
-                </div>
+                @endfor
             </div>
             <div class="mb-3">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
